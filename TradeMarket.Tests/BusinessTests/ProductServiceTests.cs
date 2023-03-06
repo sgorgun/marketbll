@@ -17,7 +17,7 @@ namespace TradeMarket.Tests.BusinessTests
     public class ProductServiceTests
     {
         [Test]
-        public async Task ProductService_GetAll_ReturnsAllProducts()
+        public async Task ProductServiceGetAllReturnsAllProducts()
         {
             //arrange
             var expected = ProductModels.ToList();
@@ -38,7 +38,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ProductService_GetAllProductCategoriesAsync_ReturnsAllCategories()
+        public async Task ProductServiceGetAllProductCategoriesAsyncReturnsAllCategories()
         {
             //arrange
             var expected = ProductCategoryModels;
@@ -59,7 +59,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(1)]
         [TestCase(2)]
-        public async Task ProductService_GetById_ReturnsProductModel(int id)
+        public async Task ProductServiceGetByIdReturnsProductModel(int id)
         {
             //arrange
             var expected = ProductModels.FirstOrDefault(x => x.Id == id);
@@ -80,7 +80,7 @@ namespace TradeMarket.Tests.BusinessTests
 
 
         [Test]
-        public async Task ProductService_AddAsync_AddsProduct()
+        public async Task ProductServiceAddAsyncAddsProduct()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -98,7 +98,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ProductService_AddCategoryAsync_AddsCategory()
+        public async Task ProductServiceAddCategoryAsyncAddsCategory()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -117,7 +117,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ProductService_AddAsync_ThrowsMarketExceptionWithEmptyProductName()
+        public async Task ProductServiceAddAsyncThrowsMarketExceptionWithEmptyProductName()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -136,7 +136,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(-5000.50)]
         [TestCase(-500000)]
         [TestCase(-0.0001)]
-        public async Task ProductService_AddAsync_ThrowsMarketExceptionIfPriceIsNegative(decimal price)
+        public async Task ProductServiceAddAsyncThrowsMarketExceptionIfPriceIsNegative(decimal price)
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -154,7 +154,7 @@ namespace TradeMarket.Tests.BusinessTests
 
 
         [Test]
-        public async Task ProductService_AddCategoryAsync_ThrowsMarketExceptionWithEmptyCategoryName()
+        public async Task ProductServiceAddCategoryAsyncThrowsMarketExceptionWithEmptyCategoryName()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -172,7 +172,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(1)]
         [TestCase(2)]
-        public async Task ProductService_DeleteAsync_DeletesProduct(int id)
+        public async Task ProductServiceDeleteAsyncDeletesProduct(int id)
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -189,7 +189,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(1)]
         [TestCase(2)]
-        public async Task ProductService_RemoveCategoryAsync_DeletesCategory(int id)
+        public async Task ProductServiceRemoveCategoryAsyncDeletesCategory(int id)
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -205,7 +205,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ProductService_UpdateAsync_UpdatesProduct()
+        public async Task ProductServiceUpdateAsyncUpdatesProduct()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -223,7 +223,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ProductService_UpdateAsync_ThrowsMarketExceptionsWithEmptyName()
+        public async Task ProductServiceUpdateAsyncThrowsMarketExceptionsWithEmptyName()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -240,7 +240,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ProductService_UpdateCategoryAsync_UpdatesCategory()
+        public async Task ProductServiceUpdateCategoryAsyncUpdatesCategory()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -258,7 +258,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ProductService_UpdateCategory_ThrowsMarketExceptionsWithEmptyName()
+        public async Task ProductServiceUpdateCategoryThrowsMarketExceptionsWithEmptyName()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -278,7 +278,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(4, new[] {6, 7})]
         [TestCase(5, new[] {10, 11})]
         [TestCase(6, new[] {12, 13})]
-        public async Task ProductService_GetByFilterAsync_ReturnsProductsByCategory(int categoryId, IEnumerable<int> expectedProductIds)
+        public async Task ProductServiceGetByFilterAsyncReturnsProductsByCategory(int categoryId, IEnumerable<int> expectedProductIds)
         {
             //arrange
             var expected = ProductModels.Where(x => expectedProductIds.Contains(x.Id));
@@ -301,7 +301,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(20, new[] { 4, 5, 7, 8, 10, 12, 13 })]
         [TestCase(37, new[] {8, 12, 13})]
-        public async Task ProductService_GetByFilter_ReturnsProductByMinPrice(int minPrice, IEnumerable<int> expectedProductIds)
+        public async Task ProductServiceGetByFilterReturnsProductByMinPrice(int minPrice, IEnumerable<int> expectedProductIds)
         {
             //arrange
             var expected = ProductModels.Where(x => expectedProductIds.Contains(x.Id));
@@ -326,7 +326,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(2, 15, 25, new[] { 4, 9 })]
         [TestCase(6, 30, 40, new[] { 12 })]
         [TestCase(5, 10, 22, new[] { 10 })]
-        public async Task ProductService_GetByFilter_ReturnsProductByFilter(int? categoryId, int? minPrice, int? maxPrice, IEnumerable<int> expectedProductIds)
+        public async Task ProductServiceGetByFilterReturnsProductByFilter(int? categoryId, int? minPrice, int? maxPrice, IEnumerable<int> expectedProductIds)
         {
             //arrange
             var expected = ProductModels.Where(x => expectedProductIds.Contains(x.Id)).ToList();

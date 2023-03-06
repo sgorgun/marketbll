@@ -18,7 +18,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
-        public async Task StatisticService_GetMostPopularProducts_ReturnsMostPopularProductsOrderedBySalesCount(int productsCount)
+        public async Task StatisticServiceGetMostPopularProductsReturnsMostPopularProductsOrderedBySalesCount(int productsCount)
         {
             //arrange 
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -36,7 +36,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
-        public async Task StatisticService_GetMostValuableCustomersAsync_ReturnsCustomersOrderedByAllReceiptsSum(int customerCount)
+        public async Task StatisticServiceGetMostValuableCustomersAsyncReturnsCustomersOrderedByAllReceiptsSum(int customerCount)
         {
             //arrange 
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -52,7 +52,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task StatisticService_GetCustomersMostPopularProductsAsync_ReturnsCustomersTopProductsOrderedBySalesCount()
+        public async Task StatisticServiceGetCustomersMostPopularProductsAsyncReturnsCustomersTopProductsOrderedBySalesCount()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -70,7 +70,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(2, 744)]
         [TestCase(3, 795)]
         [TestCase(55, 0)]
-        public async Task StatisticService_GetIncomeOfCategoryInPeriod_ReturnsSumOfCategoryProductsSalesInPeriod(int categoryId, decimal sum)
+        public async Task StatisticServiceGetIncomeOfCategoryInPeriodReturnsSumOfCategoryProductsSalesInPeriod(int categoryId, decimal sum)
         {
             var mockUnitOfWork = new Mock<IUnitOfWork>();
             mockUnitOfWork.Setup(x => x.ReceiptRepository.GetAllWithDetailsAsync()).ReturnsAsync(ReceiptEntities.AsEnumerable());
@@ -83,7 +83,7 @@ namespace TradeMarket.Tests.BusinessTests
             Assert.That(actual, Is.EqualTo(sum));
         }
 
-        public static IEnumerable<Product> ProductEntities =
+        private static readonly IEnumerable<Product> ProductEntities =
             new List<Product>
             {
                 new Product { Id = 1, ProductName = "Achi", ProductCategoryId = 1, Category = new ProductCategory { Id = 1, CategoryName = "Beverages" }, Price = 18.00m },
@@ -111,13 +111,13 @@ namespace TradeMarket.Tests.BusinessTests
                 new ProductModel { Id = 9, ProductName = "Tofu", ProductCategoryId = 2, CategoryName = "Condiments", Price = 15.50m },
             };
 
-        public static IEnumerable<ProductModel> ExpectedMostPopularProducts =
+        private static readonly IEnumerable<ProductModel> ExpectedMostPopularProducts =
             new List<ProductModel>()
 {
                 ProductModels.ElementAt(1), ProductModels.ElementAt(7), ProductModels.ElementAt(8), ProductModels.ElementAt(4), ProductModels.ElementAt(0)
             };
 
-        public static IEnumerable<ReceiptDetail> ReceiptDetailEntities =
+        private static readonly IEnumerable<ReceiptDetail> ReceiptDetailEntities =
             new List<ReceiptDetail>()
             {
                 new ReceiptDetail { Id = 1, ProductId = 1, UnitPrice = 10, Product = ProductEntities.ElementAt(0), DiscountUnitPrice = 9, Quantity = 2, ReceiptId = 1 },
@@ -131,10 +131,10 @@ namespace TradeMarket.Tests.BusinessTests
                 new ReceiptDetail { Id = 9, ProductId = 6, UnitPrice = 25, Product = ProductEntities.ElementAt(5), DiscountUnitPrice = 24, Quantity = 1, ReceiptId = 4 },
                 new ReceiptDetail { Id = 10, ProductId = 8, UnitPrice = 20, Product = ProductEntities.ElementAt(7), DiscountUnitPrice = 15,  Quantity = 50, ReceiptId = 5 },
                 new ReceiptDetail { Id = 11, ProductId = 9, UnitPrice = 35, Product = ProductEntities.ElementAt(8), DiscountUnitPrice = 26, Quantity = 24, ReceiptId = 5},
-                new ReceiptDetail { Id = 12, ProductId = 2, UnitPrice = 20, Product = ProductEntities.ElementAt(0), DiscountUnitPrice = 18, Quantity = 25, ReceiptId = 5}
+                new ReceiptDetail { Id = 12, ProductId = 2, UnitPrice = 20, Product = ProductEntities.ElementAt(1), DiscountUnitPrice = 18, Quantity = 25, ReceiptId = 5}
             };
 
-        public static IEnumerable<Customer> CustomerEntities =
+        private static readonly IEnumerable<Customer> CustomerEntities =
             new List<Customer>()
             {
                 new Customer { Id = 1, PersonId = 1, Person = new Person { Id = 1, Name = "Vittor", Surname = "Zhuk", BirthDate = new DateTime(1995, 1, 2) }, DiscountValue = 10},
@@ -143,7 +143,7 @@ namespace TradeMarket.Tests.BusinessTests
                 new Customer { Id = 4, PersonId = 4, Person =  new Person { Id = 4, Name = "Stephen", Surname = "Curry", BirthDate = new DateTime(1983, 12, 31) }, DiscountValue = 12}
             };
 
-        public static IEnumerable<Receipt> ReceiptEntities =
+        private static readonly IEnumerable<Receipt> ReceiptEntities =
             new List<Receipt>()
             {
                 new Receipt
@@ -188,7 +188,7 @@ namespace TradeMarket.Tests.BusinessTests
                 }
             };
 
-        public static IEnumerable<CustomerActivityModel> ExpectedCustomerActivityModels =
+        private static readonly IEnumerable<CustomerActivityModel> ExpectedCustomerActivityModels =
             new List<CustomerActivityModel>()
             {
                 new CustomerActivityModel { CustomerId = 1, CustomerName = "Vittor Zhuk", ReceiptSum = 2087 },

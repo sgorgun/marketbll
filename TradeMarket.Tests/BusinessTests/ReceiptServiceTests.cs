@@ -17,7 +17,7 @@ namespace TradeMarket.Tests.BusinessTests
     public class ReceiptServiceTests
     {
         [Test]
-        public async Task ReceiptService_GetAll_ReturnsAllReceipts()
+        public async Task ReceiptServiceGetAllReturnsAllReceipts()
         {
             //arrange
             var expected = GetTestReceiptsModels;
@@ -37,7 +37,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [TestCase(5)]
-        public async Task ReceiptService_GetById_ReturnsReceiptModel(int id)
+        public async Task ReceiptServiceGetByIdReturnsReceiptModel(int id)
         {
             //arrange
             var expected = GetTestReceiptsModels.FirstOrDefault(x => x.Id == id);
@@ -57,7 +57,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ReceiptService_AddAsync_AddsReceipt()
+        public async Task ReceiptServiceAddAsyncAddsReceipt()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -76,7 +76,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ReceiptService_UpdateAsync_UpdatesReceipt()
+        public async Task ReceiptServiceUpdateAsyncUpdatesReceipt()
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -96,12 +96,12 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(1)]
         [TestCase(2)]
-        public async Task ReceiptService_DeleteAsync_DeletesReceiptWithDetails(int receiptId)
+        public async Task ReceiptServiceDeleteAsyncDeletesReceiptWithDetails(int receiptId)
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
             var receipt = GetTestReceiptsEntities.First(x => x.Id == receiptId);
-            var expectedDetailsLength = receipt.ReceiptDetails.Count();
+            var expectedDetailsLength = receipt.ReceiptDetails.Count;
 
             mockUnitOfWork.Setup(m => m.ReceiptRepository.GetByIdWithDetailsAsync(It.IsAny<int>())).ReturnsAsync(receipt);
             mockUnitOfWork.Setup(m => m.ReceiptRepository.DeleteByIdAsync(It.IsAny<int>()));
@@ -122,7 +122,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(4)]
         [TestCase(5)]
-        public async Task ReceiptService_GetReceiptDetailsAsync_ReturnsDetailsByReceiptId(int receiptId)
+        public async Task ReceiptServiceGetReceiptDetailsAsyncReturnsDetailsByReceiptId(int receiptId)
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -142,7 +142,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase("1965-1-1", "1965-2-1", new[] {1, 2})]
         [TestCase("1965-2-1", "1965-4-1", new[] {3, 4, 5})]
-        public async Task ReceiptService_GetReceiptsByPeriodAsync_ReturnsReceiptsInPeriod(DateTime startDate, DateTime endDate, IEnumerable<int> expectedReceiptIds)
+        public async Task ReceiptServiceGetReceiptsByPeriodAsyncReturnsReceiptsInPeriod(DateTime startDate, DateTime endDate, IEnumerable<int> expectedReceiptIds)
         {
             //arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -161,7 +161,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(1, 99)]
         [TestCase(4, 546)]
         [TestCase(5, 1074)]
-        public async Task ReceiptService_ToPayAsync_ReturnsSumByReceiptIdWithDiscount(int receiptId, decimal expectedSum)
+        public async Task ReceiptServiceToPayAsyncReturnsSumByReceiptIdWithDiscount(int receiptId, decimal expectedSum)
         {
             //arrange
             var receipt = GetTestReceiptsEntities.FirstOrDefault(x => x.Id == receiptId);
@@ -178,7 +178,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [TestCase(4, 30)]
-        public async Task ReceiptService_AddProductAsync_CreatesReceiptDetailIfProductWasNotAddedBefore(int productId, int discountValue)
+        public async Task ReceiptServiceAddProductAsyncCreatesReceiptDetailIfProductWasNotAddedBefore(int productId, int discountValue)
         {
             //arrange 
             var receipt = new Receipt
@@ -208,7 +208,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(1, 5, 7)]
         [TestCase(2, 1, 4)]
         [TestCase(3, 200, 201)]
-        public async Task ReceiptService_AddProductAsync_UpdatesQuantityIfProductWasAddedToReceipt(int productId, int quantity, int expectedQuantity)
+        public async Task ReceiptServiceAddProductAsyncUpdatesQuantityIfProductWasAddedToReceipt(int productId, int quantity, int expectedQuantity)
         {
             //arrange 
             var receipt = new Receipt
@@ -241,7 +241,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(2, 20, 15.2)]
         [TestCase(3, 50, 5.0)]
         [TestCase(8, 99, 0.38)]
-        public async Task ReceiptService_AddProduct_SetsDiscountUnitPriceValueAccordingToCustomersDiscount(int productId, int discount, decimal expectedDiscountPrice)
+        public async Task ReceiptServiceAddProductSetsDiscountUnitPriceValueAccordingToCustomersDiscount(int productId, int discount, decimal expectedDiscountPrice)
         {
             //arrange
             var product = ProductEntities.FirstOrDefault(x => x.Id == productId);
@@ -268,7 +268,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(1)]
         [TestCase(2)]
-        public async Task ReceiptService_AddProduct_ThrowsMarketExceptionIfProductDoesNotExist(int productId)
+        public async Task ReceiptServiceAddProductThrowsMarketExceptionIfProductDoesNotExist(int productId)
         {
             //arrange
             var receipt = new Receipt { Id = 1, CustomerId = 1 };
@@ -288,7 +288,7 @@ namespace TradeMarket.Tests.BusinessTests
 
         [TestCase(1)]
         [TestCase(2)]
-        public async Task ReceiptService_AddProduct_ThrowsMarketExceptionIfReceiptDoesNotExist(int receiptId)
+        public async Task ReceiptServiceAddProductThrowsMarketExceptionIfReceiptDoesNotExist(int receiptId)
         {
             //arrange
 
@@ -307,7 +307,7 @@ namespace TradeMarket.Tests.BusinessTests
 
 
         [Test]
-        public async Task ReceiptService_CheckOutAsync_UpdatesCheckOutPropertyValueAndSavesChanges()
+        public async Task ReceiptServiceCheckOutAsyncUpdatesCheckOutPropertyValueAndSavesChanges()
         {
             //arrange
             var receipt = new Receipt { Id = 6, IsCheckedOut = false };
@@ -328,7 +328,7 @@ namespace TradeMarket.Tests.BusinessTests
         [TestCase(1, 1, 1)]
         [TestCase(2, 2, 1)]
         [TestCase(3, 3, 2)]
-        public async Task ReceiptService_RemoveProductAsync_UpdatesDetailQuantityValue(int productId, int quantity, int expectedQuantity)
+        public async Task ReceiptServiceRemoveProductAsyncUpdatesDetailQuantityValue(int productId, int quantity, int expectedQuantity)
         {
             //arrange
             var receipt = new Receipt 
@@ -355,7 +355,7 @@ namespace TradeMarket.Tests.BusinessTests
         }
 
         [Test]
-        public async Task ReceiptService_RemoveProductAsync_DeletesDetailIfQuantityEqualsZero()
+        public async Task ReceiptServiceRemoveProductAsyncDeletesDetailIfQuantityEqualsZero()
         {
 
             //arrange
