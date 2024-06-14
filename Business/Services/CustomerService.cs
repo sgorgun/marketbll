@@ -16,7 +16,6 @@ namespace Business.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private const int MINYEAR = 1900;
 
         public CustomerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -26,8 +25,6 @@ namespace Business.Services
 
         public async Task AddAsync(CustomerModel model)
         {
-            ValidateCustomerModel(model);
-
             var customer = _mapper.Map<Customer>(model);
 
             await _unitOfWork.CustomerRepository.AddAsync(customer);
@@ -67,7 +64,10 @@ namespace Business.Services
 
         public async Task UpdateAsync(CustomerModel model)
         {
-            ValidateCustomerModel(model);
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
 
             var customer = _mapper.Map<Customer>(model);
             customer.Person.Id = model.Id;
@@ -75,21 +75,6 @@ namespace Business.Services
             _unitOfWork.CustomerRepository.Update(customer);
 
             await _unitOfWork.SaveAsync();
-        }
-
-        private static void ValidateCustomerModel(CustomerModel model)
-        {
-            if (model == null)
-                throw new MarketException();
-
-            if (string.IsNullOrEmpty(model.Name) || string.IsNullOrEmpty(model.Surname))
-                throw new MarketException();
-
-            if (model.BirthDate.Year < MINYEAR || model.BirthDate.Year > DateTime.Now.Year)
-                throw new MarketException();
-
-            if (model.DiscountValue < 0)
-                throw new MarketException();
         }
     }
 }

@@ -25,8 +25,6 @@ namespace Business.Services
 
         public async Task AddAsync(ProductModel model)
         {
-            ValidateModel(model);
-
             var product = _mapper.Map<Product>(model);
 
             product.Category.Id = product.ProductCategoryId;
@@ -38,8 +36,6 @@ namespace Business.Services
 
         public async Task AddCategoryAsync(ProductCategoryModel categoryModel)
         {
-            ValidateCategoryModel(categoryModel);
-
             var productCategory = _mapper.Map<ProductCategory>(categoryModel);
 
             await _unitOfWork.ProductCategoryRepository.AddAsync(productCategory);
@@ -105,7 +101,8 @@ namespace Business.Services
 
         public async Task UpdateAsync(ProductModel model)
         {
-            ValidateModel(model);
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
 
             var product = _mapper.Map<Product>(model);
             product.Category = new ProductCategory();
@@ -120,33 +117,10 @@ namespace Business.Services
 
         public async Task UpdateCategoryAsync(ProductCategoryModel categoryModel)
         {
-            ValidateCategoryModel(categoryModel);
-
             var productCategory = _mapper.Map<ProductCategory>(categoryModel);
 
             _unitOfWork.ProductCategoryRepository.Update(productCategory);
             await _unitOfWork.SaveAsync();
-        }
-
-        private static void ValidateModel(ProductModel model)
-        {
-            if (model == null)
-                throw new MarketException();
-
-            if (model.Price < 0)
-                throw new MarketException();
-
-            if (string.IsNullOrEmpty(model.ProductName))
-                throw new MarketException();
-        }
-
-        private static void ValidateCategoryModel(ProductCategoryModel categoryModel)
-        {
-            if (categoryModel == null)
-                throw new MarketException();
-
-            if (string.IsNullOrEmpty(categoryModel.CategoryName))
-                throw new MarketException();
         }
     }
 }
