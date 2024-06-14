@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Models;
 using Data.Entities;
+using System;
 using System.Linq;
 
 namespace Business
@@ -13,14 +14,31 @@ namespace Business
                 .ForMember(rm => rm.ReceiptDetailsIds, r => r.MapFrom(x => x.ReceiptDetails.Select(rd => rd.Id)))
                 .ReverseMap();
 
-            //TODO: Create mapping for Product and ProductModel
+            CreateMap<Product, ProductModel>()
+                .ForMember(pm => pm.ReceiptDetailIds, p => p.MapFrom(x => x.ReceiptDetails.Select(rd => rd.Id)))
+                .ForMember(pm => pm.CategoryName, p => p.MapFrom(x => x.Category.CategoryName))
+                .ReverseMap();
 
-            //TODO: Create mapping for ReceiptDetail and ReceiptDetailModel
+            CreateMap<ReceiptDetail, ReceiptDetailModel>()
+                .ReverseMap();
 
-            //TODO: Create mapping that combines Customer and Person into CustomerModel
+            CreateMap<Tuple<Person, Customer>, CustomerModel>()
+                .ForMember(cm => cm.ReceiptsIds, c => c.MapFrom(x => x.Item2.Receipts.Select(rd => rd.Id)))
+                .ReverseMap();
 
-            //TODO: Create mapping for ProductCategory and ProductCategoryModel
+            CreateMap<Customer, CustomerModel>()
+                .ForMember(cm => cm.ReceiptsIds, c => c.MapFrom(x => x.Receipts.Select(rd => rd.Id)))
+                .ForMember(cm => cm.Name, c => c.MapFrom(x => x.Person.Name))
+                .ForMember(cm => cm.BirthDate, c => c.MapFrom(x => x.Person.BirthDate))
+                .ForMember(cm => cm.Surname, c => c.MapFrom(x => x.Person.Surname))
+                .ReverseMap();
 
+            CreateMap<Person, CustomerModel>()
+                .ReverseMap();
+
+            CreateMap<ProductCategory, ProductCategoryModel>()
+                .ForMember(pm => pm.ProductIds, p => p.MapFrom(x => x.Products.Select(rd => rd.Id)))
+                .ReverseMap();
         }
     }
 }
