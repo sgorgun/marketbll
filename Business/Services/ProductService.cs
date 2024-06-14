@@ -128,7 +128,7 @@ namespace Business.Services
             await _unitOfWork.SaveAsync();
         }
 
-        private void ValidateModel(ProductModel model)
+        private static void ValidateModel(ProductModel model)
         {
             if (model == null)
                 throw new MarketException();
@@ -140,7 +140,7 @@ namespace Business.Services
                 throw new MarketException();
         }
 
-        private void ValidateCategoryModel(ProductCategoryModel categoryModel)
+        private static void ValidateCategoryModel(ProductCategoryModel categoryModel)
         {
             if (categoryModel == null)
                 throw new MarketException();

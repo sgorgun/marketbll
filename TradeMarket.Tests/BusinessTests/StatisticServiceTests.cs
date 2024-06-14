@@ -196,10 +196,10 @@ namespace TradeMarket.Tests.BusinessTests
                 new CustomerActivityModel { CustomerId = 3, CustomerName = "Dezmond Morris", ReceiptSum = 159 }
             };
 
-        public static IEnumerable<ProductModel> ExpectedCustomersMostPopularProducts = 
+        private static readonly IEnumerable<ProductModel> ExpectedCustomersMostPopularProducts =
             new List<ProductModel>()
             {
-               ProductModels.ElementAt(7), ProductModels.ElementAt(1), ProductModels.ElementAt(8)
+                ProductModels.ElementAt(7), ProductModels.ElementAt(1), ProductModels.ElementAt(8)
             };
     }
 }

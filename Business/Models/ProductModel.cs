@@ -11,8 +11,8 @@ namespace Business.Models
         public int Id { get; set; }
         public int ProductCategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
-        public string ProductName { get; set; } = string.Empty;
+        public string ProductName { get; set; }
         public decimal Price { get; set; }
-        public ICollection<int> ReceiptDetailIds { get; set; }
+        public ICollection<int> ReceiptDetailIds { get; } = new List<int>();
     }
 }

@@ -8,12 +8,6 @@ namespace Data.Data
         public TradeMarketDbContext(DbContextOptions<TradeMarketDbContext> options) : base(options)
         {
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(@"Server=(GIGAHOME)\mssqllocaldb;Database=TradeMarket;Trusted_Connection=True;");
-        //}
-
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Person> Persons { get; set; }
         public DbSet<Product> Products { get; set; }
