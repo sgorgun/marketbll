@@ -17,7 +17,6 @@ namespace Business.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private const int MINYEAR = 1900;
-
         public CustomerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -37,8 +36,7 @@ namespace Business.Services
 
         public async Task DeleteAsync(int modelId)
         {
-            var customer = await _unitOfWork.CustomerRepository.GetByIdAsync(modelId);
-            if (customer == null)
+            if (_unitOfWork.CustomerRepository.GetByIdAsync(modelId) == null)
                 throw new MarketException();
 
             await _unitOfWork.CustomerRepository.DeleteByIdAsync(modelId);
@@ -48,21 +46,23 @@ namespace Business.Services
 
         public async Task<IEnumerable<CustomerModel>> GetAllAsync()
         {
-            var customers = await _unitOfWork.CustomerRepository.GetAllWithDetailsAsync();
-            return customers.Select(c => _mapper.Map<CustomerModel>(c));
+            return (await _unitOfWork.CustomerRepository.GetAllWithDetailsAsync()).Select(c => _mapper.Map<CustomerModel>(c));
         }
 
         public async Task<CustomerModel> GetByIdAsync(int id)
         {
             var customer = await _unitOfWork.CustomerRepository.GetByIdWithDetailsAsync(id);
-            return customer != null ? _mapper.Map<CustomerModel>(customer) : null;
+
+            if (customer == null)
+                return null;
+
+            return _mapper.Map<CustomerModel>(customer);
         }
 
         public async Task<IEnumerable<CustomerModel>> GetCustomersByProductIdAsync(int productId)
         {
-            var customers = await _unitOfWork.CustomerRepository.GetAllWithDetailsAsync();
-            var filteredCustomers = customers.Where(c => c.Receipts.Any(r => r.ReceiptDetails.Any(rd => rd.ProductId == productId)));
-            return _mapper.Map<IEnumerable<CustomerModel>>(filteredCustomers);
+            var customer = (await _unitOfWork.CustomerRepository.GetAllWithDetailsAsync()).Where(c => c.Receipts.Any(r => r.ReceiptDetails.Any(rd => rd.ProductId == productId)));
+            return _mapper.Map<IEnumerable<CustomerModel>>(customer);
         }
 
         public async Task UpdateAsync(CustomerModel model)

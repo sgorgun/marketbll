@@ -12,6 +12,6 @@ namespace Business.Models
         public int CustomerId { get; set; }
         public DateTime OperationDate { get; set; }
         public bool IsCheckedOut { get; set; }
-        public ICollection<int> ReceiptDetailsIds { get; set; }
+        public ICollection<int> ReceiptDetailsIds { get; set; } = new List<int>();
     }
 }

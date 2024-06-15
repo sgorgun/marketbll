@@ -16,6 +16,6 @@ namespace Business.Validation
 
         public MarketException(string message, Exception innerException) : base(message, innerException) { }
 
-        protected MarketException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext) { }
+        protected MarketException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

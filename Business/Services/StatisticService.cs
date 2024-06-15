@@ -15,31 +15,27 @@ namespace Business.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
         public StatisticService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ProductModel>> GetCustomersMostPopularProductsAsync(int productCount, int customerId)
         {
             if (productCount <= 0)
-            {
                 throw new MarketException();
-            }
 
             var receipts = await _unitOfWork.ReceiptRepository.GetAllWithDetailsAsync();
 
-            var receipt = receipts.FirstOrDefault(r => r.CustomerId == customerId);
+            var receipt = receipts.Where(r => r.CustomerId == customerId);
 
             if (receipt == null)
-            {
                 throw new MarketException();
-            }
 
-            var products = receipt.ReceiptDetails
-                .GroupBy(rd => rd.Product)
+            var products = receipt
+                .SelectMany(r => r.ReceiptDetails)
+                .GroupBy(r => r.Product)                
                 .OrderByDescending(g => g.Sum(p => p.Quantity))
                 .Select(g => g.Key)
                 .Take(productCount);
@@ -61,9 +57,7 @@ namespace Business.Services
         public async Task<IEnumerable<ProductModel>> GetMostPopularProductsAsync(int productCount)
         {
             if (productCount <= 0)
-            {
                 throw new MarketException();
-            }
 
             var receiptDetails = await _unitOfWork.ReceiptDetailRepository.GetAllWithDetailsAsync();
 
@@ -81,7 +75,7 @@ namespace Business.Services
             var receipts = await _unitOfWork.ReceiptRepository.GetAllWithDetailsAsync();
 
             var customers = receipts
-                .Select(g => new
+                .Select(g => new 
                 {
                     Customer = g.Customer,
                     ReceiptSum = g.ReceiptDetails.Sum(rd => rd.Quantity * rd.DiscountUnitPrice)
@@ -90,7 +84,7 @@ namespace Business.Services
                 .Select(g => new CustomerActivityModel
                 {
                     CustomerId = g.Key.Id,
-                    CustomerName = $"{g.Key.Person.Name} {g.Key.Person.Surname}",
+                    CustomerName = g.Key.Person.Name + " " + g.Key.Person.Surname,
                     ReceiptSum = g.Sum(r => r.ReceiptSum)
                 })
                 .OrderByDescending(cam => cam.ReceiptSum)
