@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Business.Models
 {
-    public class ProductModel
+    public class ProductModel : BaseModel
     {
-        public int Id { get; set; }
         public int ProductCategoryId { get; set; }
-        public string CategoryName { get; set; } = string.Empty;
-        public string ProductName { get; set; } = string.Empty;
+        public string CategoryName { get; set; }
+        public string ProductName { get; set; }
         public decimal Price { get; set; }
-        public ICollection<int> ReceiptDetailIds { get; } = new List<int>();
+        public ICollection<int> ReceiptDetailIds { get; set; } = new List<int>();
     }
 }

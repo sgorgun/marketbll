@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Business.Models
 {
-    public class ReceiptDetailModel
+    public class ReceiptDetailModel : BaseModel
     {
-        public int Id { get; set; }
         public int ReceiptId { get; set; }
         public int ProductId { get; set; }
         public decimal DiscountUnitPrice { get; set; }

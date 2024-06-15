@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Business.Models
 {
-    public class FilterSearchModel
+    public class FilterSearchModel : BaseModel
     {
         public int? CategoryId { get; set; }
         public int? MinPrice { get; set; }

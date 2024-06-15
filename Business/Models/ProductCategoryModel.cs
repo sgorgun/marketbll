@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Business.Models
 {
-    public class ProductCategoryModel
+    public class ProductCategoryModel : BaseModel
     {
-        public int Id { get; set; }
         public string CategoryName { get; set; }
-        public ICollection<int> ProductIds { get; set; } = new List<int>();
+        public ICollection<int> ProductIds { get; set; }
     }
 }

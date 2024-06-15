@@ -24,19 +24,16 @@ namespace Business.Services
 
         public async Task AddAsync(ProductModel model)
         {
-            ValidateModel(model);
+            if (model.IsValidModel())
+            {
+                var productEntity = _mapper.Map<Product>(model);
 
-            var product = _mapper.Map<Product>(model);
+                productEntity.Category = null;
 
-            if (product.Category == null)
-                throw new MarketException();
+                await _unitOfWork.ProductRepository.AddAsync(productEntity);
 
-            product.Category.Id = product.ProductCategoryId;
-            _unitOfWork.ProductCategoryRepository.Update(product.Category);
-
-            await _unitOfWork.ProductRepository.AddAsync(product);
-
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
+            }
         }
 
         public async Task AddCategoryAsync(ProductCategoryModel categoryModel)
@@ -108,17 +105,14 @@ namespace Business.Services
 
         public async Task UpdateAsync(ProductModel model)
         {
-            ValidateModel(model);
+            if (model.IsValidModel())
+            {
+                var product = _mapper.Map<Product>(model);
 
-            var product = _mapper.Map<Product>(model);
-            product.Category.Id = model.ProductCategoryId;
+                _unitOfWork.ProductRepository.Update(product);
 
-            _unitOfWork.ProductCategoryRepository.Update(product.Category);
-            await _unitOfWork.SaveAsync();
-
-            _unitOfWork.ProductRepository.Update(product);
-
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
+            }
         }
 
         public async Task UpdateCategoryAsync(ProductCategoryModel categoryModel)
@@ -130,18 +124,6 @@ namespace Business.Services
             _unitOfWork.ProductCategoryRepository.Update(productCategory);
 
             await _unitOfWork.SaveAsync();
-        }
-
-        private static void ValidateModel(ProductModel model)
-        {
-            if (model == null)
-                throw new MarketException();
-
-            if (model.Price < 0)
-                throw new MarketException();
-
-            if (string.IsNullOrEmpty(model.ProductName))
-                throw new MarketException();
         }
 
         private static void ValidateCategoryModel(ProductCategoryModel categoryModel)

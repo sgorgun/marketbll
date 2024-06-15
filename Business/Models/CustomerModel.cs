@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Business.Models
 {
-    public class CustomerModel
+    public class CustomerModel : BaseModel
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public string Surname { get; set; } = string.Empty;
+        public string Surname { get; set; }
         public DateTime BirthDate { get; set; }
         public int DiscountValue { get; set; }
-        public ICollection<int> ReceiptsIds { get; set; } = new List<int>();
+        public ICollection<int> ReceiptsIds { get; set; }
     }
 }
