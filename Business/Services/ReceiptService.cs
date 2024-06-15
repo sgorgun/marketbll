@@ -36,12 +36,7 @@ namespace Business.Services
 
         public async Task AddProductAsync(int productId, int receiptId, int quantity)
         {
-            var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(receiptId);
-
-            if (receipt == null)
-            {
-                throw new MarketException();
-            }
+            var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(receiptId) ?? throw new MarketException();
 
             if (quantity <= 0)
             {
@@ -52,13 +47,7 @@ namespace Business.Services
 
             if (receiptDetailWithCurrentProduct == null)
             {
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(productId);
-
-                if (product == null)
-                {
-                    throw new MarketException();
-                }
-
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(productId) ?? throw new MarketException();
                 var discount = receipt.Customer.DiscountValue;
 
                 var receiptDetails = new ReceiptDetail
@@ -83,13 +72,7 @@ namespace Business.Services
 
         public async Task CheckOutAsync(int receiptId)
         {
-            var receipt = await _unitOfWork.ReceiptRepository.GetByIdAsync(receiptId);
-
-            if (receipt == null)
-            {
-                throw new MarketException();
-            }
-
+            var receipt = await _unitOfWork.ReceiptRepository.GetByIdAsync(receiptId) ?? throw new MarketException();
             receipt.IsCheckedOut = true;
 
             _unitOfWork.ReceiptRepository.Update(receipt);
@@ -98,13 +81,7 @@ namespace Business.Services
 
         public async Task DeleteAsync(int modelId)
         {
-            var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(modelId);
-
-            if (receipt == null)
-            {
-                throw new MarketException();
-            }
-
+            var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(modelId) ?? throw new MarketException();
             await _unitOfWork.ReceiptRepository.DeleteByIdAsync(modelId);
 
             foreach (var receiptDetails in receipt.ReceiptDetails)
@@ -125,24 +102,14 @@ namespace Business.Services
         {
             var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(id);
 
-            if (receipt == null)
-            {
-                throw new MarketException();
-            }
-
-            return _mapper.Map<ReceiptModel>(receipt);
+            return receipt == null ? throw new MarketException() : _mapper.Map<ReceiptModel>(receipt);
         }
 
         public async Task<IEnumerable<ReceiptDetailModel>> GetReceiptDetailsAsync(int receiptId)
         {
             var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(receiptId);
 
-            if (receipt == null)
-            {
-                throw new MarketException();
-            }
-
-            return _mapper.Map<IEnumerable<ReceiptDetailModel>>(receipt.ReceiptDetails);
+            return receipt == null ? throw new MarketException() : _mapper.Map<IEnumerable<ReceiptDetailModel>>(receipt.ReceiptDetails);
         }
 
         public async Task<IEnumerable<ReceiptModel>> GetReceiptsByPeriodAsync(DateTime startDate, DateTime endDate)
@@ -161,19 +128,8 @@ namespace Business.Services
                 throw new MarketException();
             }
 
-            var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(receiptId);
-
-            if (receipt == null)
-            {
-                throw new MarketException();
-            }
-
-            var receiptDetails = receipt.ReceiptDetails.FirstOrDefault(r => r.ProductId == productId);
-
-            if (receiptDetails == null)
-            {
-                throw new MarketException();
-            }
+            var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(receiptId) ?? throw new MarketException();
+            var receiptDetails = receipt.ReceiptDetails.FirstOrDefault(r => r.ProductId == productId) ?? throw new MarketException();
 
             if (receiptDetails.Quantity <= quantity)
             {
@@ -191,12 +147,7 @@ namespace Business.Services
         {
             var receipt = await _unitOfWork.ReceiptRepository.GetByIdWithDetailsAsync(receiptId);
 
-            if (receipt == null)
-            {
-                throw new MarketException();
-            }
-
-            return receipt.ReceiptDetails.Sum(r => r.Quantity * r.DiscountUnitPrice);
+            return receipt == null ? throw new MarketException() : receipt.ReceiptDetails.Sum(r => r.Quantity * r.DiscountUnitPrice);
         }
 
         public async Task UpdateAsync(ReceiptModel model)

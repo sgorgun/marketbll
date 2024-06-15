@@ -30,9 +30,6 @@ namespace Business.Services
 
             var receipt = receipts.Where(r => r.CustomerId == customerId);
 
-            if (receipt == null)
-                throw new MarketException();
-
             var products = receipt
                 .SelectMany(r => r.ReceiptDetails)
                 .GroupBy(r => r.Product)                
@@ -77,7 +74,7 @@ namespace Business.Services
             var customers = receipts
                 .Select(g => new 
                 {
-                    Customer = g.Customer,
+                    g.Customer,
                     ReceiptSum = g.ReceiptDetails.Sum(rd => rd.Quantity * rd.DiscountUnitPrice)
                 })
                 .GroupBy(rd => rd.Customer)
