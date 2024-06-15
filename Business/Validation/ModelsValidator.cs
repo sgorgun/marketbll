@@ -91,7 +91,10 @@ namespace Business.Validation
             if (String.IsNullOrEmpty(customerModel.Name) || String.IsNullOrEmpty(customerModel.Surname))
                 throw new MarketException("Customer Model: Customer's name and surname can't be null or empty!");
 
-            if (customerModel.BirthDate < new DateTime(1915, 1, 1) || customerModel.BirthDate > new DateTime(2004, 1, 1))
+            DateTime minDate = new(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime maxDate = new(2005, 1, 1, 23, 59, 59, DateTimeKind.Utc);
+
+            if (customerModel.BirthDate < minDate || customerModel.BirthDate > maxDate)
                 throw new MarketException("Customer Model: Invalid date of birth!");
 
             return true;
